@@ -1,0 +1,52 @@
+import pandas as pd
+import numpy as np
+
+paskolos_suma = int(input("Įveskite norimos paskolos sumą: "))
+palukanos = int(input("Įveskite kokios palūkanos jums būtų tinkamos: "))
+terminas = int(input("Įveskite per kiek laiko norite grąžinti paskolą(mėnesiais): "))
+
+prisikaiciuotos_palukanos_list = []
+likutis_list = []
+bendra_moketina_list = []
+grazintina_dalis = paskolos_suma / terminas
+grazintina_dalis_list = [round(grazintina_dalis)] * terminas
+
+def Paskola(paskolos_suma, palukanos, terminas, grazintina_dalis):
+    for menuo in range(1, terminas + 1):
+        priskaiciuotos_palukanos = paskolos_suma * palukanos / 100 / 12
+        prisikaiciuotos_palukanos_list.append(round(priskaiciuotos_palukanos, 2))
+        likutis = paskolos_suma - grazintina_dalis
+        likutis_list.append(round(likutis))
+        bendra_moketina = grazintina_dalis + priskaiciuotos_palukanos
+        bendra_moketina_list.append(round(bendra_moketina, 2))
+        paskolos_suma = paskolos_suma - grazintina_dalis
+    return prisikaiciuotos_palukanos_list
+    return likutis_list
+    return bendra_moketina_list
+
+Paskola(paskolos_suma, palukanos, terminas, grazintina_dalis)
+
+# print(prisikaiciuotos_palukanos_list, likutis_list, grazintina_dalis_list, bendra_moketina_list)
+
+while True:
+    uzklausa = input('Jei norite matyti norimos paskolos duomenis, bendrą palūkanų sumą bei bendrą gražintiną sumą, rašykite info\n'
+                     'Jei norite matyti detalų paskutinės paskolos mokėjimo grafiką, rašykite grafikas\n'
+                     'Jei norite išeiti parašykite baigti\n')
+
+    if uzklausa == 'info':
+        print(f"Jūsų norimos paskolos duomenys: \n"
+              f"Paskolos suma - {paskolos_suma} \n"
+              f"Palūkanos - {palukanos} \n"
+              f"Paskolos terminas - {terminas} \n"
+              f"Bendra palūkanų suma - {sum(prisikaiciuotos_palukanos_list)}\n"
+              f"Bendra grąžintina suma - {sum(bendra_moketina_list)}")
+
+    elif uzklausa == 'grafikas':
+        lentele = pd.DataFrame(list(zip(grazintina_dalis_list, likutis_list, prisikaiciuotos_palukanos_list, bendra_moketina_list)),
+                          index=np.arange(1, terminas + 1),
+                          columns=['Grąžintina dalis', 'Likutis', 'Priskaičiuotos palūkanos', 'Bendra Mokėtina suma'])
+        print(lentele)
+
+    elif uzklausa == 'baigti':
+        print("Jūs išėjote iš programos. Lauksime sugrįžtant")
+        break
